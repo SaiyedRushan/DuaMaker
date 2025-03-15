@@ -9,10 +9,9 @@ import { ModeToggle } from '@/components/mode-toggle'
 import { Sheet, SheetContent, SheetTitle, SheetTrigger } from '@/components/ui/sheet'
 
 const routes = [
-  // { href: '/', label: 'Home' },
-  { href: '/chat', label: 'Chat' },
-  // { href: '/saved', label: 'Saved' },
-  // { href: '/craft', label: 'Craft' },
+  { href: '/chat?tab=Chat', label: 'Chat' },
+  { href: '/chat?tab=Saved', label: 'Saved' },
+  { href: '/chat?tab=Craft', label: 'Craft' },
 ]
 
 export function Navbar() {
@@ -20,7 +19,7 @@ export function Navbar() {
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-      <div className="container mx-auto flex h-16 items-center px-4">
+      <div className="flex h-16 items-center px-4">
         <div className="mr-4 flex items-center md:mr-6">
           <Link href="/" className="flex items-center space-x-2">
             <span className="text-xl font-bold">Dua Maker</span>

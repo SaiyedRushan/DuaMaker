@@ -8,9 +8,10 @@ import { cn } from '@/lib/utils'
 
 interface ChatSidebarProps {
   className?: string
+  onTabChange: (tab: string) => void
 }
 
-export function ChatSidebar({ className }: ChatSidebarProps) {
+export function ChatSidebar({ className, onTabChange }: ChatSidebarProps) {
   const [isOpen, setIsOpen] = useState(false)
 
   const sidebarItems = [
@@ -21,14 +22,11 @@ export function ChatSidebar({ className }: ChatSidebarProps) {
 
   const SidebarContent = () => (
     <div className="flex h-full flex-col">
-      <div className="md:p-3 md:border-b">
-        <h2 className="text-lg font-semibold">Chats</h2>
-      </div>
       <nav className="flex-1 my-4 md:p-4">
         <ul className="space-y-2">
           {sidebarItems.map((item, index) => (
             <li key={index}>
-              <Button variant="ghost" className="w-full justify-start p-0 md:p-4" onClick={() => {}}>
+              <Button variant="ghost" className="w-full justify-start p-0 md:p-4" onClick={() => onTabChange(item.label)}>
                 <item.icon className="mr-2 h-5 w-5" />
                 {item.label}
               </Button>
