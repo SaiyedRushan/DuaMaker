@@ -6,13 +6,13 @@ import { Menu } from 'lucide-react'
 
 import { Button } from '@/components/ui/button'
 import { ModeToggle } from '@/components/mode-toggle'
-import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet'
+import { Sheet, SheetContent, SheetTitle, SheetTrigger } from '@/components/ui/sheet'
 
 const routes = [
   // { href: '/', label: 'Home' },
   { href: '/chat', label: 'Chat' },
-  { href: '/saved', label: 'Saved' },
-  { href: '/craft', label: 'Craft' },
+  // { href: '/saved', label: 'Saved' },
+  // { href: '/craft', label: 'Craft' },
 ]
 
 export function Navbar() {
@@ -27,35 +27,35 @@ export function Navbar() {
           </Link>
         </div>
 
-        {/* Mobile Navigation */}
-        <Sheet open={isOpen} onOpenChange={setIsOpen}>
-          <SheetTrigger asChild className="md:hidden">
-            <Button variant="ghost" size="icon" className="mr-2">
-              <Menu className="h-5 w-5" />
-              <span className="sr-only">Toggle menu</span>
-            </Button>
-          </SheetTrigger>
-          <SheetContent side="left" className="w-[300px] sm:w-[400px]">
-            <nav className="flex flex-col gap-4 pt-10">
-              {routes.map((route) => (
-                <Link key={route.href} href={route.href} className="text-lg font-medium transition-colors hover:text-primary" onClick={() => setIsOpen(false)}>
-                  {route.label}
-                </Link>
-              ))}
-            </nav>
-          </SheetContent>
-        </Sheet>
-
-        {/* Desktop Navigation */}
-        <nav className="hidden flex-1 items-center space-x-6 md:flex">
-          {routes.map((route) => (
-            <Link key={route.href} href={route.href} className="text-sm font-medium transition-colors hover:text-primary">
-              {route.label}
-            </Link>
-          ))}
-        </nav>
-
         <div className="flex flex-1 items-center justify-end space-x-4">
+          {/* Mobile Navigation */}
+          <Sheet open={isOpen} onOpenChange={setIsOpen}>
+            <SheetTrigger asChild className="md:hidden">
+              <Button variant="ghost" size="icon" className="mr-2">
+                <Menu className="h-5 w-5" />
+                <span className="sr-only">Toggle menu</span>
+              </Button>
+            </SheetTrigger>
+            <SheetContent side="left" className="w-[300px] sm:w-[400px]">
+              <SheetTitle>Dua Maker</SheetTitle>
+              <nav className="flex flex-col gap-4 pt-10">
+                {routes.map((route) => (
+                  <Link key={route.href} href={route.href} className="text-lg font-medium transition-colors hover:text-primary" onClick={() => setIsOpen(false)}>
+                    {route.label}
+                  </Link>
+                ))}
+              </nav>
+            </SheetContent>
+          </Sheet>
+
+          {/* Desktop Navigation */}
+          <nav className="hidden  items-center space-x-6 md:flex">
+            {routes.map((route) => (
+              <Link key={route.href} href={route.href} className="text-sm font-medium transition-colors hover:text-primary">
+                {route.label}
+              </Link>
+            ))}
+          </nav>
           <ModeToggle />
           <Button className="hidden md:flex">Sign In</Button>
         </div>
