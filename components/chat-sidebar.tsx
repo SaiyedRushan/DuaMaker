@@ -26,7 +26,7 @@ export function ChatSidebar({ className, onTabChange }: ChatSidebarProps) {
         <ul className="space-y-2">
           {sidebarItems.map((item, index) => (
             <li key={index}>
-              <Button variant="ghost" className="w-full justify-start p-0 md:p-4" onClick={() => onTabChange(item.label)}>
+              <Button variant="ghost" className="w-full justify-start p-0 md:p-4 text-md" onClick={() => onTabChange(item.label)}>
                 <item.icon className="mr-2 h-5 w-5" />
                 {item.label}
               </Button>

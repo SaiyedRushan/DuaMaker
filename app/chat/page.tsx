@@ -26,7 +26,7 @@ export default function ChatPage() {
       <div className="flex flex-1 flex-col">
         <header className="border-b bg-background/95 px-4 py-3 backdrop-blur supports-[backdrop-filter]:bg-background/60">
           <h1 className="text-xl font-bold">
-            {tab === 'Chat' && 'Chat Room'}
+            {tab === 'Chat' && 'Talk your heart out'}
             {tab === 'Saved' && 'Saved Duas'}
             {tab === 'Craft' && 'Craft Duas'}
           </h1>

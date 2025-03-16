@@ -10,57 +10,102 @@ import { ScrollArea } from '@/components/ui/scroll-area'
 import { Avatar } from '@/components/ui/avatar'
 import { cn } from '@/lib/utils'
 
-// Define message type
 interface Message {
   id: string
   content: string
   sender: 'user' | 'other'
-  timestamp: Date
 }
 
-// Sample initial messages
-const initialMessages: Message[] = [
+const responseMessages: Message[] = [
   {
     id: '1',
-    content: 'Hello! How can I help you today?',
+    content:
+      'It is extremely important to include everything you need and want while making du’a, without holding back. No desire is too much for Allah to grant it. The Messenger of Allah (saw) said, ‘When one of you calls upon Allah, let him hope for the greatest of things. Verily, nothing has any greatness over Allah.’ [Ibn Hibban]',
     sender: 'other',
-    timestamp: new Date('2023-10-01T10:00:00'), // Hardcoded time
   },
   {
     id: '2',
-    content: 'I have a question about the new features.',
-    sender: 'user',
-    timestamp: new Date('2023-10-01T10:01:00'), // Hardcoded time
+    content:
+      'The Messenger of Allah (saw) said, ‘Ask Allah for His favour. Verily, Allah Almighty loves to be asked and among the best acts of worship is to wait in expectation of relief.’ [Tirmidhi]',
+    sender: 'other',
   },
   {
     id: '3',
-    content: "Sure, I'd be happy to explain the new features. What would you like to know specifically?",
+    content:
+      'The Prophet said, ‘The servant will continue to have his supplications answered as long as he does not ask for sin or cut family ties, and he is not impatient.’ They said, ‘O Messenger of Allah, what is its impatience?’ The Prophet said, ’He says, ”I have supplicated again and again, but I have not seen an answer.” He becomes frustrated with that and gives up supplicating”’. [Bukhari]',
     sender: 'other',
-    timestamp: new Date('2023-10-01T10:02:00'), // Hardcoded time
   },
   {
     id: '4',
-    content: "Sure, I'd be happy to explain the new features. What would you like to know specifically?",
+    content: 'Good deeds elevate our du’as. Allah says, ‘To Him do good words go up and righteous action uplifts them.’ [The Noble Qur’an, 35:10]',
     sender: 'other',
-    timestamp: new Date('2023-10-01T10:02:00'), // Hardcoded time
   },
   {
     id: '5',
-    content: 'Hello! How can I help you today?',
+    content:
+      'The Prophet (saw) said, ‘Du’a is worship itself’. Then the Prophet (saw) recited this verse, ‘Your Lord says: “Call upon Me and I will respond to you. Verily, those who disdain My worship will enter Hell in humiliation.” [The Noble Qur’an, 40:60]’. [Tirmidhi]',
     sender: 'other',
-    timestamp: new Date('2023-10-01T10:00:00'), // Hardcoded time
   },
   {
     id: '6',
-    content: 'I have a question about the new features.',
-    sender: 'user',
-    timestamp: new Date('2023-10-01T10:01:00'), // Hardcoded time
+    content:
+      'SubhanAllah, raising our hands in du’a is a Sunnah with such a beautiful meaning behind it! We encourage you to remember the following hadith every time you physically raise your hands:The Prophet (saw) said, ‘Indeed your Lord - Blessed and Almighty is He - is Shy and Most Generous. He is shy when His servant raises his hands to Him (in du’a) to turn them away empty.’ [Abu Dawud]',
+    sender: 'other',
   },
   {
     id: '7',
-    content: "Sure, I'd be happy to explain the new features. What would you like to know specifically?",
+    content: 'Allah says, ‘And to Allah belong the Beautiful Names, so invoke Him by them.’ [The Noble Qur’an, 7:180]',
     sender: 'other',
-    timestamp: new Date('2023-10-01T10:02:00'), // Hardcoded time
+  },
+  {
+    id: '8',
+    content:
+      'Don’t miss out on making du’a for other people! The Messenger of Allah (saw) said, ‘No Muslim servant supplicates for his brother behind his back but that an angel says, “And for you the same.“’ [Muslim]',
+    sender: 'other',
+  },
+  {
+    id: '9',
+    content:
+      'As Abu Zuhayr reported, ‘We went out one night with the Messenger of Allah (saw) and a man came to us who was earnestly supplicating to Allah for some matter. The Prophet stopped and listened to him, then he said, “It must be so if he seals it.” A man among the people said, “With what does he seal it?” The Prophet said, “Amin, for if he ends it with amin, it will be so…“’ [Abu Dawud]',
+    sender: 'other',
+  },
+  {
+    id: '10',
+    content:
+      'The Messenger of Allah (saw) said, ‘Ask Allah for His favour. Verily, Allah Almighty loves to be asked and among the best acts of worship is to wait in expectation of relief.’ [Tirmidhi]',
+    sender: 'other',
+  },
+  {
+    id: '11',
+    content:
+      'The Prophet (saw) said, ’There is no Muslim who calls upon Allah, without sin or cutting family ties, but that Allah will give him one of three answers: He will quickly fulfil his supplication, He will store it for him in the Hereafter, or He will divert an evil from him similar to it.′ They said, ‘In that case we will ask for more.’ The Prophet said, ′Allah has even more.′ [Ahmad]',
+    sender: 'other',
+  },
+  {
+    id: '12',
+    content:
+      'Prophet Muhammad PBUH said "Friday is twelve hours in which there is no Muslim slave who asks Allah (SWT) for something but He will give it to him, so seek it in the last hour after \'Asr." (Sunan Al Nisa’i).',
+    sender: 'other',
+  },
+  {
+    id: '13',
+    content: 'Prophet Muhammad PBUH said “The nearest a slave can be to his Lord (Allāh) is while they are prostrating, so increase in supplication” (Muslim).',
+    sender: 'other',
+  },
+  {
+    id: '14',
+    content:
+      'Anas ibn Malik reported: The Messenger of Allah, peace and blessings be upon him, said, “Let one of you ask his Lord for his needs, all of them, even for a shoestring when his breaks.” (Sunan al-Tirmidhī 3973)',
+    sender: 'other',
+  },
+]
+
+const initialMessages: Message[] = [
+  {
+    id: '1',
+    content:
+      'Bismillahirrahmanirrahim. Don’t rush into your du’a without first praising Allah and then sending prayers upon our beloved Prophet (saw): The Prophet (saw) said, ‘When any one of you have performed Salah (prayer) and wants to supplicate, let him begin with praising His Lord (swt) and glorifying Him, then send prayers upon the Prophet (saw). Then he may supplicate for whatever he wishes.’ [Tirmidhi]',
+    sender: 'other',
   },
 ]
 
@@ -69,7 +114,6 @@ export function ChatInterface() {
   const [newMessage, setNewMessage] = useState('')
   const messagesEndRef = useRef<HTMLDivElement>(null)
 
-  // Auto-scroll to bottom when messages change
   useEffect(() => {
     scrollToBottom()
   }, [messages])
@@ -83,34 +127,26 @@ export function ChatInterface() {
 
     if (!newMessage.trim()) return
 
-    // Create new message
     const userMessage: Message = {
       id: Date.now().toString(),
       content: newMessage,
       sender: 'user',
-      timestamp: new Date(),
     }
 
-    // Add user message to chat
     setMessages((prev) => [...prev, userMessage])
     setNewMessage('')
 
     // Simulate response after a short delay
     setTimeout(() => {
+      const randomIndex = Math.floor(Math.random() * responseMessages.length)
       const responseMessage: Message = {
         id: (Date.now() + 1).toString(),
-        content: `I received your message: "${newMessage}"`,
+        content: responseMessages[randomIndex].content,
         sender: 'other',
-        timestamp: new Date(),
       }
 
       setMessages((prev) => [...prev, responseMessage])
     }, 1000)
-  }
-
-  // Format timestamp
-  const formatTime = (date: Date) => {
-    return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
   }
 
   return (
@@ -122,13 +158,12 @@ export function ChatInterface() {
             <div key={message.id} className={cn('flex items-end gap-2 max-w-[80%]', message.sender === 'user' ? 'ml-auto justify-end' : '')}>
               {message.sender === 'other' && (
                 <Avatar className="h-8 w-8">
-                  <div className="bg-primary text-primary-foreground flex h-full w-full items-center justify-center rounded-full text-sm font-medium">A</div>
+                  <img src="/hadith-bot.png" alt="" />
                 </Avatar>
               )}
 
               <div className={cn('rounded-lg px-4 py-2', message.sender === 'user' ? 'bg-primary text-primary-foreground' : 'bg-muted')}>
                 <p>{message.content}</p>
-                <p className={cn('text-xs mt-1', message.sender === 'user' ? 'text-primary-foreground/70' : 'text-muted-foreground')}>{formatTime(message.timestamp)}</p>
               </div>
 
               {message.sender === 'user' && (
