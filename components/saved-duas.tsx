@@ -2,84 +2,77 @@ import { EditIcon, Loader2, PlusIcon, TrashIcon } from 'lucide-react'
 import { Button } from './ui/button'
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from './ui/dialog'
 import { Textarea } from './ui/textarea'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { ScrollArea } from './ui/scroll-area'
 
-export function SavedDuas() {
-  const [savedDuas, setSavedDuas] = useState([
-    {
-      id: 1,
-      dua: 'Rabbana aatina fiddunya hasanah wa fil akhirati hasanah wa kina adhabannar',
-      createdAt: '2021-01-01',
-      updatedAt: '2021-01-01',
-    },
-    {
-      id: 2,
-      dua: 'Ya rab help me be the best version of myself',
-      createdAt: '2021-01-01',
-      updatedAt: '2021-01-01',
-    },
-    {
-      id: 3,
-      dua: 'Ya rab help me become strong and fit and lean and muscular and healthy and wealthy and wise and happy and successful and loved by all',
-      createdAt: '2021-01-01',
-      updatedAt: '2021-01-01',
-    },
-    {
-      id: 4,
-      dua: 'Ya rab help me get a very nice job with a very nice salary',
-      createdAt: '2021-01-01',
-      updatedAt: '2021-01-01',
-    },
-    {
-      id: 5,
-      dua: 'Ya rab help me grow thick and dense hair',
-      createdAt: '2021-01-01',
-      updatedAt: '2021-01-01',
-    },
-    {
-      id: 6,
-      dua: 'Ya rab help me improve my communication skills. Help me become fluent and eloquent in my speech. Rabbish rahli sadri wa yassirli amri wahlul ukdatammilisaani yafkahu kawli',
-      createdAt: '2021-01-01',
-      updatedAt: '2021-01-01',
-    },
-    {
-      id: 7,
-      dua: 'Ya rab help me be able to speak in public without being nervous and anxious. Help me be able to answer questions confidently and without hesitation.',
-      createdAt: '2021-01-01',
-      updatedAt: '2021-01-01',
-    },
-    {
-      id: 8,
-      dua: 'Ya rab help me improve my confidence and self esteem. Help me be able to stand up for myself and speak my mind without being afraid of what people think.',
-      createdAt: '2021-01-01',
-      updatedAt: '2021-01-01',
-    },
-  ])
+interface Dua {
+  id: number
+  dua: string
+  created_at: string
+  updated_at: string
+}
 
+export function SavedDuas() {
+  const [savedDuas, setSavedDuas] = useState<Dua[]>([])
+  const [isLoading, setIsLoading] = useState(true)
   const [isDialogOpen, setIsDialogOpen] = useState(false)
   const [currentDua, setCurrentDua] = useState('')
   const [isEditing, setIsEditing] = useState(false)
   const [editDuaId, setEditDuaId] = useState<number | null>(null)
 
-  const handleSaveDua = () => {
-    if (isEditing && editDuaId !== null) {
-      setSavedDuas((prevDuas) => prevDuas.map((dua) => (dua.id === editDuaId ? { ...dua, dua: currentDua, updatedAt: new Date().toISOString() } : dua)))
-    } else {
-      setSavedDuas((prevDuas) => [
-        ...prevDuas,
-        {
-          id: prevDuas.length + 1,
-          dua: currentDua,
-          createdAt: new Date().toISOString(),
-          updatedAt: new Date().toISOString(),
-        },
-      ])
+  useEffect(() => {
+    fetchDuas()
+  }, [])
+
+  const fetchDuas = async () => {
+    try {
+      const response = await fetch('/api/duas')
+      const data = await response.json()
+      setSavedDuas(data)
+    } catch (error) {
+      console.error('Error fetching duas:', error)
+    } finally {
+      setIsLoading(false)
     }
-    setIsDialogOpen(false)
-    setCurrentDua('')
-    setIsEditing(false)
-    setEditDuaId(null)
+  }
+
+  const handleSaveDua = async () => {
+    try {
+      if (isEditing && editDuaId !== null) {
+        const response = await fetch(`/api/duas/${editDuaId}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ dua: currentDua }),
+        })
+        const data = await response.json()
+        setSavedDuas((prevDuas) => prevDuas.map((dua) => (dua.id === editDuaId ? data : dua)))
+      } else {
+        const response = await fetch('/api/duas', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ dua: currentDua }),
+        })
+        const data = await response.json()
+        setSavedDuas((prevDuas) => [data, ...prevDuas])
+      }
+      setIsDialogOpen(false)
+      setCurrentDua('')
+      setIsEditing(false)
+      setEditDuaId(null)
+    } catch (error) {
+      console.error('Error saving dua:', error)
+    }
+  }
+
+  const handleDeleteDua = async (id: number) => {
+    try {
+      await fetch(`/api/duas/${id}`, {
+        method: 'DELETE',
+      })
+      setSavedDuas((prevDuas) => prevDuas.filter((dua) => dua.id !== id))
+    } catch (error) {
+      console.error('Error deleting dua:', error)
+    }
   }
 
   const openAddDialog = () => {
@@ -122,19 +115,25 @@ export function SavedDuas() {
       </div>
 
       <ScrollArea className="max-h-[80vh]">
-        {savedDuas.map((dua) => (
-          <div key={dua.id} className="border-b p-4 flex items-center justify-between">
-            <h3 className="text-lg">{dua.dua}</h3>
-            <div className="flex items-center gap-2">
-              <Button variant="outline" onClick={() => openEditDialog(dua.id, dua.dua)}>
-                <EditIcon className="h-4 w-4" />
-              </Button>
-              <Button variant="outline">
-                <TrashIcon className="h-4 w-4" />
-              </Button>
-            </div>
+        {isLoading ? (
+          <div className="flex items-center justify-center p-4">
+            <Loader2 className="h-6 w-6 animate-spin" />
           </div>
-        ))}
+        ) : (
+          savedDuas.map((dua) => (
+            <div key={dua.id} className="border-b p-4 flex items-center justify-between">
+              <h3 className="text-lg">{dua.dua}</h3>
+              <div className="flex items-center gap-2">
+                <Button variant="outline" onClick={() => openEditDialog(dua.id, dua.dua)}>
+                  <EditIcon className="h-4 w-4" />
+                </Button>
+                <Button variant="outline" onClick={() => handleDeleteDua(dua.id)}>
+                  <TrashIcon className="h-4 w-4" />
+                </Button>
+              </div>
+            </div>
+          ))
+        )}
       </ScrollArea>
 
       {isDialogOpen && (

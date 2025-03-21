@@ -5,18 +5,19 @@ import { ChatSidebar } from '@/components/chat-sidebar'
 import { ChatInterface } from '@/components/chat-interface'
 import { SavedDuas } from '@/components/saved-duas'
 import { CraftDuas } from '@/components/craft-duas'
-import { useSearchParams } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 
 export default function ChatPage() {
   const searchParams = useSearchParams()
   const [tab, setTab] = useState(searchParams.get('tab') || 'Chat')
-
+  const router = useRouter()
   useEffect(() => {
     setTab(searchParams.get('tab') || 'Chat')
   }, [searchParams])
 
   const handleTabChange = (tab: string) => {
-    setTab(tab)
+    // rather than using the setTab function, we will use the searchParams to change the tab
+    router.push(`/chat?tab=${tab}`)
   }
 
   return (

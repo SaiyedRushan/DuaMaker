@@ -8,7 +8,8 @@ const openai = new OpenAI({
 
 export async function POST(req: NextRequest) {
   try {
-    const instructions = 'Please enhance the dua that the user enters. Use Allahs name and attributes to make the dua more powerful. Only respond with the enhanced dua, no other text.'
+    const instructions =
+      'Please enhance the dua that the user enters. Use Allahs name and attributes that are relevant to the dua to make the dua more powerful. Only respond with the enhanced dua, no other text.'
     const { message } = await req.json()
     const response = await openai.chat.completions.create({
       model: 'deepseek-chat',
