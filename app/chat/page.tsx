@@ -1,16 +1,17 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useState, Suspense } from 'react'
 import { ChatSidebar } from '@/components/chat-sidebar'
 import { ChatInterface } from '@/components/chat-interface'
 import { SavedDuas } from '@/components/saved-duas'
 import { CraftDuas } from '@/components/craft-duas'
 import { useRouter, useSearchParams } from 'next/navigation'
 
-export default function ChatPage() {
+function ChatContent() {
   const searchParams = useSearchParams()
   const [tab, setTab] = useState(searchParams.get('tab') || 'Chat')
   const router = useRouter()
+
   useEffect(() => {
     setTab(searchParams.get('tab') || 'Chat')
   }, [searchParams])
@@ -21,7 +22,6 @@ export default function ChatPage() {
   }
 
   return (
-    // 64 px is the height of the navbar
     <div className="flex flex-1 max-h-[calc(100vh-63px)]">
       <ChatSidebar onTabChange={handleTabChange} />
       <div className="flex flex-1 flex-col">
@@ -39,5 +39,13 @@ export default function ChatPage() {
         </main>
       </div>
     </div>
+  )
+}
+
+export default function ChatPage() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <ChatContent />
+    </Suspense>
   )
 }
