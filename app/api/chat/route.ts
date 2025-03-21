@@ -10,7 +10,7 @@ const openai = new OpenAI({
 export async function POST(req: NextRequest) {
   try {
     const instructions =
-      'Please enhance the dua that the user enters. Use all the names of Allah and attributes that are relevant to the dua to make the dua more powerful. Provide english meaning in brackets for the names. Only respond with the enhanced dua, no other text.'
+      'Please enhance the dua that the user enters. Use all the names of Allah and attributes that are relevant to the dua to make the dua more powerful. Provide english meaning in brackets for the names. Only respond with the enhanced dua in the english language, no other text.'
     const { message } = await req.json()
     const response = await openai.chat.completions.create({
       model: 'gemini-2.0-flash',
