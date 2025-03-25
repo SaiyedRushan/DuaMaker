@@ -18,8 +18,8 @@ export async function GET(request: Request, { params }: { params: Promise<{ id: 
 export async function PUT(request: Request, { params }: { params: Promise<{ id: string }> }) {
   try {
     const { id } = await params
-    const { dua } = await request.json()
-    const { data, error } = await supabase.from('saved_duas').update({ dua, updated_at: new Date().toISOString() }).eq('id', id).select().single()
+    const { dua, title } = await request.json()
+    const { data, error } = await supabase.from('saved_duas').update({ dua, title, updated_at: new Date().toISOString() }).eq('id', id).select().single()
     if (error) throw error
     return NextResponse.json(data)
   } catch (err) {

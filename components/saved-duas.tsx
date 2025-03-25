@@ -1,12 +1,14 @@
-import { EditIcon, Loader2, PlusIcon, TrashIcon } from 'lucide-react'
+import { Delete, EditIcon, Loader2, PlusIcon } from 'lucide-react'
 import { Button } from './ui/button'
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from './ui/dialog'
 import { Textarea } from './ui/textarea'
 import { useState, useEffect } from 'react'
 import { ScrollArea } from './ui/scroll-area'
+import { Input } from './ui/input'
 
 interface Dua {
   id: number
+  title: string
   dua: string
   created_at: string
   updated_at: string
@@ -19,6 +21,7 @@ export function SavedDuas() {
   const [currentDua, setCurrentDua] = useState('')
   const [isEditing, setIsEditing] = useState(false)
   const [editDuaId, setEditDuaId] = useState<number | null>(null)
+  const [currentTitle, setCurrentTitle] = useState('')
 
   useEffect(() => {
     fetchDuas()
@@ -42,7 +45,7 @@ export function SavedDuas() {
         const response = await fetch(`/api/duas/${editDuaId}`, {
           method: 'PUT',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ dua: currentDua }),
+          body: JSON.stringify({ dua: currentDua, title: currentTitle }),
         })
         const data = await response.json()
         setSavedDuas((prevDuas) => prevDuas.map((dua) => (dua.id === editDuaId ? data : dua)))
@@ -50,13 +53,14 @@ export function SavedDuas() {
         const response = await fetch('/api/duas', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ dua: currentDua }),
+          body: JSON.stringify({ dua: currentDua, title: currentTitle }),
         })
         const data = await response.json()
         setSavedDuas((prevDuas) => [data, ...prevDuas])
       }
       setIsDialogOpen(false)
       setCurrentDua('')
+      setCurrentTitle('')
       setIsEditing(false)
       setEditDuaId(null)
     } catch (error) {
@@ -79,13 +83,15 @@ export function SavedDuas() {
     setIsDialogOpen(true)
     setCurrentDua('')
     setIsEditing(false)
+    setCurrentTitle('')
   }
 
-  const openEditDialog = (duaId: number, duaText: string) => {
+  const openEditDialog = (duaId: number, duaText: string, duaTitle: string) => {
     setIsDialogOpen(true)
     setCurrentDua(duaText)
     setIsEditing(true)
     setEditDuaId(duaId)
+    setCurrentTitle(duaTitle)
   }
 
   const [isEnhancing, setIsEnhancing] = useState(false)
@@ -121,14 +127,17 @@ export function SavedDuas() {
           </div>
         ) : (
           savedDuas.map((dua) => (
-            <div key={dua.id} className="border-b p-4 flex items-center justify-between">
-              <h3 className="text-lg">{dua.dua}</h3>
-              <div className="flex items-center gap-2">
-                <Button variant="outline" onClick={() => openEditDialog(dua.id, dua.dua)}>
+            <div key={dua.id} className="border-b p-4 flex gap-1 items-center justify-between">
+              <div className="flex flex-col gap-1">
+                <h3 className="text-md font-bold italic">{dua.title}</h3>
+                <p className="text-sm sm:text-base">{dua.dua}</p>
+              </div>
+              <div className="flex flex-col sm:flex-row items-center gap-2">
+                <Button variant="outline" onClick={() => openEditDialog(dua.id, dua.dua, dua.title)}>
                   <EditIcon className="h-4 w-4" />
                 </Button>
                 <Button variant="outline" onClick={() => handleDeleteDua(dua.id)}>
-                  <TrashIcon className="h-4 w-4" />
+                  <Delete className="h-4 w-4" />
                 </Button>
               </div>
             </div>
@@ -142,6 +151,7 @@ export function SavedDuas() {
             <DialogHeader>
               <DialogTitle>{isEditing ? 'Edit Dua' : 'Add New Dua'}</DialogTitle>
             </DialogHeader>
+            <Input placeholder="Enter title here..." value={currentTitle} onChange={(e) => setCurrentTitle(e.target.value)} />
             <Textarea placeholder="Enter your dua here..." value={currentDua} onChange={(e) => setCurrentDua(e.target.value)} className="min-h-[120px] resize-y" />
             <DialogFooter>
               <Button variant="outline" onClick={() => setIsDialogOpen(false)}>

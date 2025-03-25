@@ -163,7 +163,7 @@ export function ChatInterface() {
               )}
 
               <div className={cn('rounded-lg px-4 py-2', message.sender === 'user' ? 'bg-primary text-primary-foreground' : 'bg-muted')}>
-                <p>{message.content}</p>
+                <p className="text-sm sm:text-base">{message.content}</p>
               </div>
 
               {message.sender === 'user' && (

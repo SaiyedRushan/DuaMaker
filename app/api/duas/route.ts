@@ -16,10 +16,10 @@ export async function GET() {
 // POST new dua
 export async function POST(request: Request) {
   try {
-    const { dua } = await request.json()
+    const { dua, title } = await request.json()
     const { data, error } = await supabase
       .from('saved_duas')
-      .insert([{ dua, created_at: new Date().toISOString(), updated_at: new Date().toISOString() }])
+      .insert([{ dua, title, created_at: new Date().toISOString(), updated_at: new Date().toISOString() }])
       .select()
       .single()
 
